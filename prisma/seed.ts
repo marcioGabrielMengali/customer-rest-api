@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
+import { fakerEN } from "@faker-js/faker";
 import { randomUUID } from "node:crypto";
 import { createCustomerDto } from "../src/modules/customers/dtos/createCustomer.dto";
 import { createOrderDto } from "../src/modules/orders/dtos/createOrderDto.dto";
@@ -15,9 +15,20 @@ async function main() {
   const customers: createCustomerDto[] = [];
   const orders: createOrderDto[] = [];
   for (let i = 0; i < 1000; i++) {
+    const firstName = fakerEN.person.firstName(i % 0 == 0 ? "male" : "female");
+    const lastName = fakerEN.person.firstName(i % 0 == 0 ? "male" : "female");
     const customer: createCustomerDto = {
       id: randomUUID(),
-      firstName: faker.person.firstName(i % 0 == 0 ? "male" : "female"),
+      firstName,
+      lastName,
+      email: fakerEN.internet.email({ firstName, lastName }),
+      phoneNumber: fakerEN.phone.number({ style: "international" }),
+      birthDate: fakerEN.date.birthdate(),
+      street: fakerEN.location.street(),
+      number: Number(fakerEN.location.buildingNumber()),
+      city: fakerEN.location.city(),
+      state: fakerEN.location.state(),
+      country: fakerEN.location.country(),
     };
     customers.push(customer);
   }
@@ -54,9 +65,9 @@ async function main() {
   for (let i = 0; i < 20; i++) {
     const product: CreateProductDto = {
       id: randomUUID(),
-      productName: faker.food.dish(),
-      productDescription: faker.food.description(),
-      productPrice: Number(faker.commerce.price({ min: 20, max: 80 })),
+      productName: fakerEN.food.dish(),
+      productDescription: fakerEN.food.description(),
+      productPrice: Number(fakerEN.commerce.price({ min: 20, max: 80 })),
       productCategoryId: Math.floor(Math.random() * 3) + 1,
     };
     products.push(product);

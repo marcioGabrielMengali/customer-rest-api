@@ -8,9 +8,18 @@ datasource db {
 }
 
 model Customer {
-  id        String  @id @default(uuid())
-  firstName String  @map("first_name")
-  orders    Order[]
+  id          String   @id @default(uuid())
+  firstName   String   @map("first_name")
+  lastName    String   @map("lastname")
+  email       String
+  phoneNumber String   @map("phone_number")
+  birthDate   DateTime @map("birth_date")
+  street      String
+  number      Int
+  city        String
+  state       String
+  country     String
+  orders      Order[]
 
   @@map("customers")
 }
@@ -41,6 +50,9 @@ model Order {
   totalPrice     Decimal   @map("total_price")
   customerId     String    @map("customer_id")
   customer       Customer  @relation(fields: [customerId], references: [id])
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
 
   @@map("orders")
 }
